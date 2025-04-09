@@ -1,10 +1,6 @@
 {
   "pages": [
-    "page/home/index",
-    "page/component/index",
-    "page/API/index",
-    "page/cloud/index",
-    "page/extend/index"
+    "page/home/index"
   ],
   "usingComponents": {
     "t-dialog": "tdesign-miniprogram/dialog/dialog",
@@ -61,8 +57,6 @@
       "root": "packageAPI",
       "pages": [
         "pages/api/login/login",
-        "pages/api/get-user-info/get-user-info",
-        "pages/api/request-payment/request-payment",
         "pages/api/jump/jump",
         "pages/api/share/share",
         "pages/api/share-button/share-button",
@@ -196,32 +190,6 @@
       ]
     }
   ],
-  "preloadRule": {
-    "page/component/index": {
-      "network": "all",
-      "packages": [
-        "packageComponent"
-      ]
-    },
-    "page/API/index": {
-      "network": "all",
-      "packages": [
-        "packageAPI"
-      ]
-    },
-    "page/cloud/index": {
-      "network": "all",
-      "packages": [
-        "packageCloud"
-      ]
-    },
-    "page/extend/index": {
-      "network": "all",
-      "packages": [
-        "packageExtend"
-      ]
-    }
-  },
   "window": {
     "navigationBarTextStyle": "@navigationBarTextStyle",
     "navigationBarTitleText": "演示",
