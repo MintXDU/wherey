@@ -1,0 +1,193 @@
+<view class="container">
+  <t-search placeholder="查找你的东西" shape="round" bind:change="onSearch"/>
+  <t-fab icon="add" bind:click="openModal" aria-label="增加"></t-fab>
+
+  <!-- 弹窗：使用 wx:if 条件渲染 -->
+  <view wx:if="{{showModal}}" class="modal">
+    <view class="modal-content">
+      <view class="modal-title">添加新物品</view>
+      <form bindsubmit="formSubmit">
+        <!-- 基本信息 -->
+        <view class="form-section">
+          <view class="form-group">
+            <text>物品名称</text>
+            <input name="name" placeholder="请输入物品名称" />
+          </view>
+
+          <view class="form-group">
+            <text>环境照片</text>
+            <t-icon name="add" size="48rpx" data-name="add" bind:click="showPicModal" />
+            <image wx:if="{{tmpItem.pic}}" src="{{tmpItem.pic}}" mode="aspectFit" />
+          </view>
+        </view>
+
+        <!-- 位置信息 -->
+        <view class="form-section">
+          <view class="form-group">
+            <text>物品位置</text>
+            <button type="button" bindtap="chooseLocation">选择位置</button>
+            <view class="location-info" wx:if="{{tmpItem.location.address}}">
+              <text class="location-text">{{tmpItem.location.address}}</text>
+            </view>
+          </view>
+
+          <view class="form-group">
+            <text>具体位置</text>
+            <input name="customLocation" placeholder="请输入具体位置（如：床头柜抽屉里）" value="{{tmpItem.customLocation}}" />
+          </view>
+        </view>
+
+        <!-- 时间信息 -->
+        <view class="form-section">
+          <view class="form-group">
+            <text>记录时间</text>
+            <picker mode="date" value="{{tmpItem.date}}" bindchange="bindDateChange">
+              <view class="picker">日期：{{tmpItem.date}}</view>
+            </picker>
+            <picker mode="time" value="{{tmpItem.time}}" bindchange="bindTimeChange">
+              <view class="picker">时间：{{tmpItem.time}}</view>
+            </picker>
+          </view>
+        </view>
+
+        <!-- 操作按钮 -->
+        <view class="form-actions">
+          <button formType="submit" class="submit-btn" hover-class="button-hover" hover-stay-time="100">添加</button>
+          <button bind:tap="cancelModal" class="cancel-btn" hover-class="button-hover" hover-stay-time="100">取消</button>
+        </view>
+      </form>
+    </view>
+  </view>
+
+  <view wx:if="{{showPicModal}}" class="picModal">
+    <view class="picModal-content">
+      <view class="camera-container">
+        <camera device-position="back" flash="off" binderror="error" style="width: 100%; height: 100%;"></camera>
+      </view>
+      <view class="camera-controls">
+        <view class="camera-btn cancel-btn" bindtap="cancelPicModal">取消</view>
+        <view class="camera-btn take-btn" bindtap="takePhoto">拍照</view>
+      </view>
+      <view class="preview-container" wx:if="{{tmpItem.pic}}">
+        <text class="preview-title">预览</text>
+        <image mode="aspectFit" src="{{tmpItem.pic}}" class="preview-image"></image>
+        <view class="preview-controls">
+          <view class="preview-btn retake-btn" bindtap="retakePhoto">重拍</view>
+          <view class="preview-btn confirm-btn" bindtap="confirmPhoto">确定</view>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <view class="conversation-list">
+    <view class="conversation-item" wx:for="{{filteredItemList}}" wx:key="index">
+      <image class="avatar" src="{{item.pic}}" bindtap="previewImage" data-src="{{item.pic}}"/>
+      <view class="conversation-preview">
+        <view class="name">{{item.name}}</view>
+        <view class="message-preview" bindtap="openLocation" data-latitude="{{item.location.latitude}}" data-longitude="{{item.location.longitude}}">
+          {{item.location.address || (item.location.latitude + ', ' + item.location.longitude)}}
+        </view>
+        <view class="custom-location" wx:if="{{item.customLocation}}">
+          {{item.customLocation}}
+        </view>
+      </view>
+      <view class="timestamp">{{item.date}} {{item.time}}</view>
+      <view class="action-buttons">
+        <view class="edit-btn" bindtap="editItem" data-index="{{index}}">
+          <t-icon name="edit" size="32rpx"/>
+        </view>
+        <view class="delete-btn" bindtap="showDeleteDialog" data-index="{{index}}">
+          <t-icon name="delete" size="32rpx"/>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 删除确认弹窗 -->
+  <t-dialog
+    visible="{{showDeleteDialog}}"
+    title="确认删除"
+    content="确定要删除这个物品吗？"
+    confirm-btn="删除"
+    cancel-btn="取消"
+    bind:confirm="deleteItem"
+    bind:cancel="hideDeleteDialog"
+  />
+
+  <!-- 编辑弹窗 -->
+  <view wx:if="{{showEditModal}}" class="modal">
+    <view class="modal-content">
+      <view class="modal-title">编辑物品</view>
+      <form bindsubmit="editFormSubmit">
+        <!-- 基本信息 -->
+        <view class="form-section">
+          <view class="form-group">
+            <text>物品名称</text>
+            <input name="name" placeholder="请输入物品名称" value="{{editingItem.name}}" />
+          </view>
+
+          <view class="form-group">
+            <text>环境照片</text>
+            <t-icon name="add" size="48rpx" data-name="add" bind:click="showEditPicModal" />
+            <image wx:if="{{editingItem.pic}}" src="{{editingItem.pic}}" mode="aspectFit" />
+          </view>
+        </view>
+
+        <!-- 位置信息 -->
+        <view class="form-section">
+          <view class="form-group">
+            <text>物品位置</text>
+            <button type="button" bindtap="chooseEditLocation">选择位置</button>
+            <view class="location-info" wx:if="{{editingItem.location.address}}">
+              <text class="location-text">{{editingItem.location.address}}</text>
+            </view>
+          </view>
+
+          <view class="form-group">
+            <text>具体位置</text>
+            <input name="customLocation" placeholder="请输入具体位置（如：床头柜抽屉里）" value="{{editingItem.customLocation}}" />
+          </view>
+        </view>
+
+        <!-- 时间信息 -->
+        <view class="form-section">
+          <view class="form-group">
+            <text>记录时间</text>
+            <picker mode="date" value="{{editingItem.date}}" bindchange="bindEditDateChange">
+              <view class="picker">日期：{{editingItem.date}}</view>
+            </picker>
+            <picker mode="time" value="{{editingItem.time}}" bindchange="bindEditTimeChange">
+              <view class="picker">时间：{{editingItem.time}}</view>
+            </picker>
+          </view>
+        </view>
+
+        <!-- 操作按钮 -->
+        <view class="form-actions">
+          <button formType="submit" class="submit-btn" hover-class="button-hover" hover-stay-time="100">保存</button>
+          <button bind:tap="cancelEditModal" class="cancel-btn" hover-class="button-hover" hover-stay-time="100">取消</button>
+        </view>
+      </form>
+    </view>
+  </view>
+
+  <view wx:if="{{showEditPicModal}}" class="picModal">
+    <view class="picModal-content">
+      <view class="camera-container">
+        <camera device-position="back" flash="off" binderror="error" style="width: 100%; height: 100%;"></camera>
+      </view>
+      <view class="camera-controls">
+        <view class="camera-btn cancel-btn" bindtap="cancelEditPicModal">取消</view>
+        <view class="camera-btn take-btn" bindtap="takeEditPhoto">拍照</view>
+      </view>
+      <view class="preview-container" wx:if="{{editingItem.pic}}">
+        <text class="preview-title">预览</text>
+        <image mode="aspectFit" src="{{editingItem.pic}}" class="preview-image"></image>
+        <view class="preview-controls">
+          <view class="preview-btn retake-btn" bindtap="retakeEditPhoto">重拍</view>
+          <view class="preview-btn confirm-btn" bindtap="confirmEditPhoto">确定</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

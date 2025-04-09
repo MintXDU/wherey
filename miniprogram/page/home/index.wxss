@@ -1,0 +1,397 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* 确保容器占满整个屏幕高度 */
+}
+
+.conversation-list {
+  flex: 1; /* 让列表占满剩余空间 */
+  overflow-y: auto; /* 如果内容过多，允许滚动 */
+  padding: 10px;
+}
+
+.conversation-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  border-bottom: 1rpx solid #eee;
+  position: relative;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  margin-right: 10px;
+}
+
+.action-buttons {
+  position: absolute;
+  right: 20rpx;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 20rpx;
+}
+
+.edit-btn, .delete-btn {
+  padding: 10rpx;
+  color: #666;
+}
+
+.edit-btn:active, .delete-btn:active {
+  color: #333;
+}
+
+.delete-btn {
+  color: #ff4d4f;
+}
+
+.delete-btn:active {
+  color: #ff7875;
+}
+
+.conversation-preview {
+  flex: 1;
+  margin-left: 20rpx;
+  margin-right: 120rpx;
+}
+
+.name {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 8rpx;
+}
+
+.message-preview {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.timestamp {
+  font-size: 24rpx;
+  color: #999;
+  position: absolute;
+  right: 120rpx;
+  top: 20rpx;
+}
+
+/* 弹窗遮罩 */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #fff;
+  width: 90%;
+  max-height: 85vh;
+  border-radius: 24rpx;
+  padding: 40rpx;
+  overflow-y: auto;
+  box-shadow: 0 4rpx 24rpx rgba(0, 0, 0, 0.1);
+}
+
+/* 拍照弹窗样式 */
+.picModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #000;
+  z-index: 1000;
+}
+
+.picModal-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.camera-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.camera-controls {
+  padding: 20rpx;
+  height: 120rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+  gap: 150rpx; /* 调整按钮之间的间距 */
+}
+
+.camera-btn {
+  width: 600rpx;
+  height: 100rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 40rpx; /* 调整为圆角矩形 */
+  font-size: 32rpx;
+  color: #fff;
+}
+
+.cancel-btn {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.take-btn {
+  background: #07c160;
+}
+
+.preview-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  padding: 20rpx;
+}
+
+.preview-title {
+  color: #fff;
+  font-size: 32rpx;
+  text-align: center;
+  margin-bottom: 20rpx;
+}
+
+.preview-image {
+  flex: 1;
+  width: 100%;
+  margin-bottom: 20rpx;
+}
+
+.preview-controls {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 40rpx;
+}
+
+.preview-btn {
+  padding: 20rpx 40rpx;
+  border-radius: 40rpx;
+  font-size: 32rpx;
+  color: #fff;
+}
+
+.retake-btn {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.confirm-btn {
+  background: #07c160;
+}
+
+/* 表单各项样式 */
+.form-group {
+  margin-bottom: 32rpx;
+  position: relative;
+}
+
+.form-group text {
+  display: block;
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 16rpx;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  height: 88rpx;
+  padding: 0 24rpx;
+  border: 2rpx solid #e8e8e8;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  background: #f8f8f8;
+}
+
+.form-group input:focus {
+  border-color: #07c160;
+  background: #fff;
+}
+
+.form-group button {
+  width: 100%;
+  height: 88rpx;
+  line-height: 88rpx;
+  background: #f8f8f8;
+  border: 2rpx solid #e8e8e8;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+.form-group button:active {
+  background: #f0f0f0;
+}
+
+.picker {
+  width: 100%;
+  height: 88rpx;
+  line-height: 88rpx;
+  padding: 0 24rpx;
+  border: 2rpx solid #e8e8e8;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  background: #f8f8f8;
+  color: #333;
+}
+
+/* 提交按钮样式 */
+.submit-btn {
+  width: 100%;
+  height: 88rpx;
+  line-height: 88rpx;
+  background: #07c160;
+  color: #fff;
+  border: none;
+  border-radius: 12rpx;
+  font-size: 32rpx;
+  margin-top: 40rpx;
+  margin-bottom: 20rpx;
+}
+
+/* 取消按钮样式 */
+.cancel-btn {
+  width: 100%;
+  height: 88rpx;
+  line-height: 88rpx;
+  background: #f8f8f8;
+  color: #666;
+  border: none;
+  border-radius: 12rpx;
+  font-size: 32rpx;
+}
+
+/* 按钮点击效果 */
+.button-hover {
+  opacity: 0.8;
+  transform: scale(0.98);
+}
+
+/* 提交按钮点击效果 */
+.submit-btn.button-hover {
+  background: #06ad56;
+}
+
+/* 取消按钮点击效果 */
+.cancel-btn.button-hover {
+  background: #f0f0f0;
+}
+
+/* 图片预览样式 */
+.form-group image {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 12rpx;
+  margin-top: 16rpx;
+  border: 2rpx solid #e8e8e8;
+}
+
+/* 图标按钮样式 */
+.form-group .t-icon {
+  width: 160rpx;
+  height: 160rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f8f8;
+  border: 2rpx dashed #e8e8e8;
+  border-radius: 12rpx;
+  margin-top: 16rpx;
+  color: #999;
+}
+
+.form-group .t-icon:active {
+  background: #f0f0f0;
+}
+
+/* 位置信息样式 */
+.location-info {
+  margin-top: 16rpx;
+  padding: 16rpx;
+  background: #f8f8f8;
+  border-radius: 12rpx;
+}
+
+.location-text {
+  color: #333;
+  font-size: 28rpx;
+  line-height: 1.5;
+}
+
+/* 自定义位置样式 */
+.custom-location {
+  font-size: 24rpx;
+  color: #666;
+  margin-top: 8rpx;
+  padding: 8rpx 16rpx;
+  background: #f8f8f8;
+  border-radius: 8rpx;
+  display: inline-block;
+}
+
+/* 弹窗标题 */
+.modal-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 40rpx;
+  text-align: center;
+}
+
+/* 表单分组 */
+.form-section {
+  margin-bottom: 40rpx;
+  padding-bottom: 40rpx;
+  border-bottom: 2rpx solid #f0f0f0;
+}
+
+.form-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+/* 操作按钮区域 */
+.form-actions {
+  margin-top: 40rpx;
+}
+
+/* 图片预览容器 */
+.image-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+  margin-top: 16rpx;
+}
+
+/* 时间选择器容器 */
+.time-picker {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 16rpx;
+}
+
+.time-picker .picker {
+  flex: 1;
+}

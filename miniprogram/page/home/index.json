@@ -1,0 +1,12 @@
+{
+  "navigationBarTitleText": "东西在哪",
+  "usingComponents": {
+    "t-fab": "tdesign-miniprogram/fab/fab",
+    "t-search": "tdesign-miniprogram/search/search",
+    "t-message": "tdesign-miniprogram/message/message",
+    "t-button": "tdesign-miniprogram/button/button",
+    "t-upload": "tdesign-miniprogram/upload/upload",
+    "t-action-sheet": "tdesign-miniprogram/action-sheet/action-sheet",
+    "t-icon": "tdesign-miniprogram/icon/icon"
+  }
+}
